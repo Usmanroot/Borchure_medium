@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@theme {
+  --font-custom: 'cyber', sans-serif;
+  --font-custom: 'glitch', sans-serif;
+}
+@font-face {
+  font-family: 'cyber';
+  src: url('./assets/Fonts/elons.regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'glitch';
+  src: url('./assets/Fonts/sdglitchdemo.regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
