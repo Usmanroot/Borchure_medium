@@ -32,13 +32,9 @@ export default function Linktree({
   return (
     <div className='w-full max-w-[1600px] mx-auto p-5 md:p-12'>
       <div className='bg-zinc-900/90 backdrop-blur-xl border-8 border-cyan-500/40 p-6 md:p-12 rounded-2xl shadow-2xl shadow-purple-500/50 w-full'>
-        
-        {/* Заголовок */}
         <h1 className='text-center text-5xl md:text-7xl text-cyan-400 font-[glitch] mb-10 uppercase tracking-wider drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]'>
           {title}
         </h1>
-
-        {/* Сетка кнопок */}
         <div className='grid grid-cols-1 md:grid-cols-2 gap-5 items-center'>
           {socials.map((social, index) => (
             <a
@@ -48,7 +44,6 @@ export default function Linktree({
               rel="noopener noreferrer"
               className={`w-full py-5 px-6 bg-purple-600/80 border-2 border-cyan-500/40 rounded-xl flex items-center justify-center gap-3 text-white text-lg md:text-2xl font-bold tracking-wide transition-all duration-300 ease-in-out hover:scale-[1.02] hover:bg-purple-600 shadow-lg ${social.color}`}
             >
-              {/* Рендерим иконку только если она передана */}
               {social.icon && (
                 <img 
                   src={social.icon} 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 export default function Arts({
   title = "Arts & Fanarts",
@@ -41,22 +41,38 @@ export default function Arts({
     }
   ]
 }) {
+  const [selectedArt, setSelectedArt] = useState(null)
+  useEffect(() => {
+    if (!selectedArt) return
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setSelectedArt(null)
+    }
+    document.addEventListener('keydown', onKeyDown)
+
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [selectedArt])
+
   return (
     <div className='w-full max-w-[1600px] mx-auto p-5 md:p-12'>
       <div className='bg-zinc-900 backdrop-blur-xl border-8 border-cyan-500/40 p-6 md:p-12 rounded-2xl shadow-2xl shadow-purple-500/50 w-full'>
-        
         <h1 className='text-center text-5xl md:text-7xl text-cyan-400 font-[glitch] mb-10 uppercase tracking-wider drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]'>
           {title}
         </h1>
-
-        {/* Сетка: 1-й большой арт слева, остальные красивой сеткой справа */}
         <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-          
-          {/* Главный арт (первый элемент массива) */}
           {artsList[0] && (
-            <div className='md:col-span-2 relative group overflow-hidden rounded-xl border-4 border-cyan-400/80 shadow-lg min-h-87.5 md:min-h-125'>
-              <img 
-                src={artsList[0].url} 
+            <div
+              onClick={() => setSelectedArt(artsList[0])}
+              className='md:col-span-2 relative group overflow-hidden rounded-xl border-4 border-cyan-400/80 shadow-lg min-h-87.5 md:min-h-125 cursor-pointer'
+            >
+              <img
+                src={artsList[0].url}
                 alt={artsList[0].title}
                 className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-500'
               />
@@ -66,14 +82,15 @@ export default function Arts({
               </div>
             </div>
           )}
-
-          {/* Все остальные арты (со 2-го и до конца массива) */}
           <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-6 auto-rows-fr'>
-            {/* .slice(1) берёт ВСЕ элементы начиная со 2-го (индекс 1) */}
             {artsList.slice(1).map((art) => (
-              <div key={art.id} className='relative group overflow-hidden rounded-xl border-4 border-cyan-400/80 shadow-lg h-55'>
-                <img 
-                  src={art.url} 
+              <div
+                key={art.id}
+                onClick={() => setSelectedArt(art)}
+                className='relative group overflow-hidden rounded-xl border-4 border-cyan-400/80 shadow-lg h-55 cursor-pointer'
+              >
+                <img
+                  src={art.url}
                   alt={art.title}
                   className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-500'
                 />
@@ -84,10 +101,40 @@ export default function Arts({
               </div>
             ))}
           </div>
-
         </div>
-
       </div>
+      {selectedArt && (
+        <div
+          onClick={() => setSelectedArt(null)}
+          className='fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 md:p-10 animate-[fadeIn_0.2s_ease-out]'
+        >
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              setSelectedArt(null)
+            }}
+            
+            className='absolute top-4 right-4 md:top-8 md:right-8 w-11 h-11 flex items-center justify-center rounded-full border text-cyan-300 hover:bg-zinc-800 transition-colors text-2xl leading-none cursor-pointer'
+          >
+            ×
+          </button>
+
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className='max-w-[95vw] max-h-[90vh] flex flex-col items-center gap-4'
+          >
+            <img
+              src={selectedArt.url}
+              alt={selectedArt.title}
+              className='max-w-full max-h-[80vh] object-contain rounded-xl border-4 border-cyan-400/80 shadow-2xl shadow-cyan-500/30'
+            />
+            <div className='text-center text-white'>
+              <p className='font-bold text-lg text-cyan-300'>{selectedArt.title}</p>
+              <p className='text-sm text-purple-200'>Art by {selectedArt.author}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
